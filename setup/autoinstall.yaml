@@ -8,7 +8,7 @@ autoinstall:
   identity:
     realname: 'Jeremy'
     username: jwatkins
-    password: '$1$sF63ScGL$yeHMYiK.a7/FNZ/WEcaMu/'
+    password: '$y$j9T$3Kp7ap7F3PvkUCmmJ1hrk0$2xA8ncpBU3MzFpq0HrBQQXsFGZBML9HDo3pAUxFt8bD'
     hostname: ubuntu
     groups:
       append: [sudo, docker]
