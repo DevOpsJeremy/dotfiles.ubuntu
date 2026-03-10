@@ -6,13 +6,54 @@ autoinstall:
     layout:
       name: lvm
   identity:
+    username: jwatkins
+    password: '$y$j9T$3Kp7ap7F3PvkUCmmJ1hrk0$2xA8ncpBU3MzFpq0HrBQQXsFGZBML9HDo3pAUxFt8bD'
     hostname: ubuntu
-  timezone: "America/Los_Angeles"
-  user-data:
-     users:
-       - name: jwatkins
-         gecos: 'Jeremy'
-         passwd: '$y$j9T$3Kp7ap7F3PvkUCmmJ1hrk0$2xA8ncpBU3MzFpq0HrBQQXsFGZBML9HDo3pAUxFt8bD'
-         groups: sudo, docker
-         shell: /bin/bash
-         lock_passwd: False
+  refresh-installer:
+    update: true
+  ssh:
+    install-server: true
+    authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJXIj36E/beyFtQ5/J55DzSVTHZgQ4/c1nAQxx61+H3X devopsjeremy@omarchy
+  snaps:
+    - name: git-ubuntu
+    - name: powershell
+  timezone: America/Los_Angeles
+  updates: all
+  packages:
+    - ca-certificates
+    - curl
+    - software-properties-common
+  late-commands:
+    # Create the keyrings directory
+    - curtin in-target -- mkdir -p /etc/apt/keyrings
+
+    # Add Docker's GPG key
+    - curtin in-target -- curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    - curtin in-target -- chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add Docker's apt repository
+    - curtin in-target -- /bin/bash -c 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo ${UBUNTU_CODENAME:-$VERSION_CODENAME}) stable" > /etc/apt/sources.list.d/docker.list'
+
+    # Install Docker
+    - curtin in-target -- apt update
+    - curtin in-target -- apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # Enable docker without sudo
+    - curtin in-target -- sudo groupadd docker
+    - curtin in-target -- sudo usermod -aG docker jwatkins
+
+    # Start docker on startup
+    - curtin in-target -- systemctl enable docker.service
+
+    # Set up git
+    - curtin in-target -- mkdir /home/jwatkins/repos
+
+    # Set up Ansible
+    - curtin in-target -- add-apt-repository --yes --update ppa:ansible/ansible
+    - curtin in-target -- apt install -y ansible
+
+    # Disable messages
+    - curtin in-target -- chmod -x /etc/update-motd.d/*
+    - curtin in-target -- systemctl disable motd-news.service
+    - curtin in-target -- systemctl disable motd-news.timer
