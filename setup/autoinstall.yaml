@@ -1,4 +1,5 @@
 autoinstall:
+  version: 1
   keyboard:
     layout: us
   storage:
