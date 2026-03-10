@@ -1,0 +1,14 @@
+autoinstall:
+  keyboard:
+    layout: us
+  storage:
+    layout:
+      name: lvm
+  identity:
+    realname: 'Jeremy'
+    username: jwatkins
+    password: '$1$sF63ScGL$yeHMYiK.a7/FNZ/WEcaMu/'
+    hostname: ubuntu
+    groups:
+      append: [sudo, docker]
+  timezone: "America/Los_Angeles"
