@@ -1,0 +1,4 @@
+- name: Configure
+  hosts: ubuntu
+  roles:
+    - config

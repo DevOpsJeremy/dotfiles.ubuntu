@@ -1,0 +1,12 @@
+- name: Files
+  include_tasks: "{{ file.type | default('file') }}.yml"
+  vars:
+    file: >-
+      {{
+        {'path': item_raw, 'type': 'file'}
+        if item_raw is string
+        else item_raw
+      }}
+  loop: "{{ files | default([]) }}"
+  loop_control:
+    loop_var: item_raw
