@@ -10,3 +10,6 @@
   loop: "{{ files | default([]) }}"
   loop_control:
     loop_var: item_raw
+
+- name: Packages
+  include_tasks: packages.yml

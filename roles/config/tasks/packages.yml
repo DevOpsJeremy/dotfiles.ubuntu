@@ -1,0 +1,20 @@
+- name: Configure apt
+  ansible.builtin.apt:
+    autoclean: "{{ _apt_autoclean }}"
+    autoremove: "{{ _apt_autoremove }}"
+  become: true
+
+- name: Configure apt packages
+  ansible.builtin.apt:
+    name: "{{ apt_package.name }}"
+  vars:
+    apt_package: >-
+      {{
+        {'name': item_raw}
+        if item_raw is string
+        else item_raw
+      }}
+  loop: "{{ apt }}"
+  loop_control:
+    loop_var: item_raw
+  become: true

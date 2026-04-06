@@ -6,3 +6,9 @@ files:
   - src: .gitconfig
     dest: ~/.gitconfig
     cp: true
+
+apt:
+  - python3-pip
+  - python3-venv
+
+pip: []
