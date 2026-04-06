@@ -1,0 +1,24 @@
+files:
+  - path: ~/repos
+    state: directory
+  - src: .gitconfig
+    dest: ~/.gitconfig
+    cp: true
+  - src: .bashrc
+    dest: ~/.bashrc
+    cp: true
+  - src: .bash_aliases
+    dest: ~/.bash_aliases
+    cp: true
+  - src: .bash_variables
+    dest: ~/.bash_variables
+    cp: true
+
+virtualenv_path: ~/venv
+
+apt:
+  - python3-pip
+  - python3-venv
+
+pip:
+  - ansible

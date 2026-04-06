@@ -1,14 +1,2 @@
 ansible_host: ubuntu
 ansible_connection: local
-files:
-  - path: ~/repos
-    state: directory
-  - src: .gitconfig
-    dest: ~/.gitconfig
-    cp: true
-
-apt:
-  - python3-pip
-  - python3-venv
-
-pip: []

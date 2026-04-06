@@ -6,15 +6,11 @@
 
 - name: Configure apt packages
   ansible.builtin.apt:
-    name: "{{ apt_package.name }}"
-  vars:
-    apt_package: >-
-      {{
-        {'name': item_raw}
-        if item_raw is string
-        else item_raw
-      }}
-  loop: "{{ apt }}"
-  loop_control:
-    loop_var: item_raw
+    name: "{{ apt }}"
   become: true
+
+- name: Configure pip packages
+  ansible.builtin.pip:
+    name: "{{ pip }}"
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_command: python3 -m venv
