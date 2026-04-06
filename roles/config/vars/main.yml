@@ -1,3 +1,10 @@
+keyring_dir: /etc/apt/keyrings
+docker_keyring: "{{ keyring_dir }}/docker.asc"
+
+downloads:
+  - url: https://download.docker.com/linux/ubuntu/gpg
+    dest: "{{ docker_keyring }}"
+
 files:
   - path: ~/repos
     state: directory
@@ -13,10 +20,21 @@ files:
   - src: .bash_variables
     dest: ~/.bash_variables
     cp: true
+  - path: "{{ keyring_dir }}"
+    state: directory
+    mode: '0755'
+  - path: "{{ docker_keyring }}"
+    state: directory
+    mode: 'a+r'
 
 virtualenv_path: ~/venv
 
+apt_repositories:
+  - repo: deb https://download.docker.com/linux/ubuntu {{ ansible_facts.lsb.codename }} stable {{ 'amd64' if ansible_architecture == 'x86_64' else '' }} {{ docker_keyring }}
+
 apt:
+  - curl
+  - ca-certificates
   - python3-pip
   - python3-venv
 

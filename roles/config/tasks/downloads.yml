@@ -1,0 +1,14 @@
+- name: Download items
+  ansible.builtin.uri:
+    url: "{{ item.url }}"
+    user: "{{ item.user | default(omit) }}"
+    password: "{{ item.password | default(omit) }}"
+    method: "{{ item.method | default(omit) }}"
+    body: "{{ item.body | default(omit) }}"
+    force_basic_auth: "{{ item.force_basic_auth | default(omit) }}"
+    status_code: "{{ item.status_code | default(omit) }}"
+    body_format: "{{ item.body_format | default(omit) }}"
+    creates: "{{ item.creates | default(item.dest | default(omit)) }}"
+    dest: "{{ item.dest | default(omit) }}"
+    src: "{{ item.src | default(omit) }}"
+  loop: "{{ downloads | default([]) }}"

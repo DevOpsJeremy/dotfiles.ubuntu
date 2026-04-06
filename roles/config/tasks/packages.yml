@@ -4,13 +4,20 @@
     autoremove: "{{ _apt_autoremove }}"
   become: true
 
+- name: Configure apt repositories
+  ansible.builtin.apt_repository:
+    repo: "{{ item.repo }}"
+    filename: "{{ item.filename | default(omit) }}"
+  loop: "{{ apt_repositories | default([]) }}"
+  become: true
+
 - name: Configure apt packages
   ansible.builtin.apt:
-    name: "{{ apt }}"
+    name: "{{ apt | default([]) }}"
   become: true
 
 - name: Configure pip packages
   ansible.builtin.pip:
-    name: "{{ pip }}"
+    name: "{{ pip | default([]) }}"
     virtualenv: "{{ virtualenv_path }}"
     virtualenv_command: python3 -m venv

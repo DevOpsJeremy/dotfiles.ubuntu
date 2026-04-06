@@ -11,7 +11,7 @@
         modification_time: "{{ item.modification_time | default(omit) }}"
         modification_time_format: "{{ item.modification_time_format | default(omit) }}"
         owner: "{{ item.owner | default(omit) }}"
-        path: "{{ item if item is string else item.path }}"
+        path: "{{ item if item is string else item.path | default(omit) }}"
         recurse: "{{ item.recurse | default(omit) }}"
         selevel: "{{ item.selevel | default(omit) }}"
         serole: "{{ item.serole | default(omit) }}"
@@ -20,7 +20,7 @@
         src: "{{ item.src | default(omit) }}"
         state: "{{ item.state | default(omit) }}"
         unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
-      loop: "{{ files }}"
+      loop: "{{ files | default([]) }}"
       when: item.cp is not defined or not item.cp
       become: "{{ file.become | default(false) }}"
       register: set_file
@@ -51,7 +51,7 @@
         src: "{{ item.src | default(omit) }}"
         unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
         validate: "{{ item.validate | default(omit) }}"
-      loop: "{{ files }}"
+      loop: "{{ files | default([]) }}"
       when: item.cp is defined and item.cp
       become: "{{ item.become | default(false) }}"
       register: copy_file

@@ -1,3 +1,6 @@
+- name: Downloads
+  include_tasks: downloads.yml
+
 - name: Files
   include_tasks: files.yml
 
