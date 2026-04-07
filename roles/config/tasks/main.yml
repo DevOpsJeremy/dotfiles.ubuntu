@@ -4,5 +4,8 @@
 - name: Files
   include_tasks: files.yml
 
-- name: Packages
-  include_tasks: packages.yml
+#- name: Packages
+#  include_tasks: packages.yml
+
+- name: Docker
+  include_tasks: docker.yml

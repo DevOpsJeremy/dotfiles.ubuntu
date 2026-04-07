@@ -1,0 +1,4 @@
+- community.docker.docker_compose_v2:
+    project_src: /home/jwatkins/repos/dotfiles.ubuntu
+    remove_orphans: true
+  become: true

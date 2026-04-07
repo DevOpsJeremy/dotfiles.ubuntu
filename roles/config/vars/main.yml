@@ -20,12 +20,19 @@ files:
   - src: .bash_variables
     dest: ~/.bash_variables
     cp: true
+  - src: sshd_config
+    dest: /etc/ssh/sshd_config
+    cp: true
+    become: true
   - path: "{{ keyring_dir }}"
     state: directory
     mode: '0755'
   - path: "{{ docker_keyring }}"
     state: directory
     mode: 'a+r'
+  - path: ~/.hushlogin
+    state: file
+    mode: 'u+r'
 
 virtualenv_path: ~/venv
 
