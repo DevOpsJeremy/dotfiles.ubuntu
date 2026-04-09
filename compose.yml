@@ -4,6 +4,9 @@ services:
     ports: [3000:8080]
     volumes:
       - open-webui:/app/backend/data
+      - ollama:/root/.ollama
+    restart: on-failure:3
 
 volumes:
   open-webui:
+  ollama:

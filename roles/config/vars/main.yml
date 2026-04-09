@@ -1,3 +1,12 @@
+group_list:
+  - name: docker
+    become: true
+
+user_list:
+  - name: "{{ ansible_user }}"
+    groups: [docker]
+    become: true
+
 keyring_dir: /etc/apt/keyrings
 docker_keyring: "{{ keyring_dir }}/docker.asc"
 
@@ -6,19 +15,19 @@ downloads:
     dest: "{{ docker_keyring }}"
 
 files:
-  - path: ~/repos
+  - path: "{{ lookup('env', 'HOME') }}/repos"
     state: directory
   - src: .gitconfig
-    dest: ~/.gitconfig
+    dest: "{{ lookup('env', 'HOME') }}/.gitconfig"
     cp: true
   - src: .bashrc
-    dest: ~/.bashrc
+    dest: "{{ lookup('env', 'HOME') }}/.bashrc"
     cp: true
   - src: .bash_aliases
-    dest: ~/.bash_aliases
+    dest: "{{ lookup('env', 'HOME') }}/.bash_aliases"
     cp: true
   - src: .bash_variables
-    dest: ~/.bash_variables
+    dest: "{{ lookup('env', 'HOME') }}/.bash_variables"
     cp: true
   - src: sshd_config
     dest: /etc/ssh/sshd_config
@@ -30,9 +39,9 @@ files:
   - path: "{{ docker_keyring }}"
     state: directory
     mode: 'a+r'
-  - path: ~/.hushlogin
-    state: file
-    mode: 'u+r'
+  - dest: "{{ lookup('env', 'HOME') }}/.hushlogin"
+    content: ''
+    cp: true
 
 virtualenv_path: ~/venv
 

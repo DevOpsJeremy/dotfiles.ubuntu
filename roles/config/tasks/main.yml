@@ -1,3 +1,6 @@
+- name: Users & groups
+  include_tasks: users.yml
+
 - name: Downloads
   include_tasks: downloads.yml
 

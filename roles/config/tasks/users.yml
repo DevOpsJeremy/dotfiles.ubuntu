@@ -1,0 +1,16 @@
+- name: Configure groups
+  ansible.builtin.group:
+    name: "{{ group if group is string else group.name }}"
+  loop: "{{ group_list | default([]) }}"
+  loop_control:
+    loop_var: group
+  become: "{{ group.become | default(false) }}"
+
+- name: Configure users
+  ansible.builtin.user:
+    name: "{{ user if user is string else user.name }}"
+    groups: "{{ user.groups | default(omit) }}"
+  loop: "{{ user_list | default([]) }}"
+  loop_control:
+    loop_var: user
+  become: "{{ user.become | default(false) }}"
