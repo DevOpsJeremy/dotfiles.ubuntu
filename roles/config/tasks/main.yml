@@ -6,9 +6,19 @@
 
 - name: Files
   include_tasks: files.yml
+  vars:
+    files: "{{ files_early }}"
 
 - name: Packages
   include_tasks: packages.yml
+
+- name: Datastore
+  include_tasks: datastore.yml
+
+- name: Files
+  include_tasks: files.yml
+  vars:
+    files: "{{ files_late }}"
 
 #- name: Docker
 #  include_tasks: docker.yml

@@ -8,39 +8,42 @@ group_list:
 
 user_list:
   - name: jwatkins
-    groups: [docker]
-    become: true
-
-  - name: jwatkins
-    groups: [sudo]
+    groups: [sudo, docker]
     become: true
 
 keyring_dir: /etc/apt/keyrings
 docker_keyring: "{{ keyring_dir }}/docker.asc"
+datastore_mount: /mnt/md5
+docker_configs: "{{ datastore_mount }}/config"
 
 downloads:
   - url: https://download.docker.com/linux/ubuntu/gpg
     dest: "{{ docker_keyring }}"
 
-files:
+files_early:
   - path: "{{ lookup('env', 'HOME') }}/repos"
     state: directory
-  - src: .gitconfig
-    dest: "{{ lookup('env', 'HOME') }}/.gitconfig"
-    cp: true
-  - src: .bashrc
-    dest: "{{ lookup('env', 'HOME') }}/.bashrc"
-    cp: true
+  - src: "{{ role_path }}/files/.gitconfig"
+    path: "{{ lookup('env', 'HOME') }}/.gitconfig"
+    state: link
+    force: true
+  - src: "{{ role_path }}/files/.bashrc"
+    path: "{{ lookup('env', 'HOME') }}/.bashrc"
+    state: link
+    force: true
   - src: .bash_aliases
-    dest: "{{ lookup('env', 'HOME') }}/.bash_aliases"
-    cp: true
+    path: "{{ lookup('env', 'HOME') }}/.bash_aliases"
+    state: link
+    force: true
   - src: .bash_variables
-    dest: "{{ lookup('env', 'HOME') }}/.bash_variables"
-    cp: true
-  - src: sshd_config
-    dest: /etc/ssh/sshd_config
-    cp: true
+    path: "{{ lookup('env', 'HOME') }}/.bash_variables"
+    state: link
+    force: true
+  - src: "{{ role_path }}/files/sshd_config"
+    path: /etc/ssh/sshd_config
+    state: link
     become: true
+    force: true
   - path: "{{ keyring_dir }}"
     state: directory
     mode: '0755'
@@ -50,6 +53,26 @@ files:
   - dest: "{{ lookup('env', 'HOME') }}/.hushlogin"
     content: ''
     cp: true
+  - path: "{{ datastore_mount }}"
+    state: directory
+
+files_late:
+  - path: "{{ docker_configs }}/compose.yml"
+    src: "{{ playbook_dir }}/compose.yml"
+    state: link
+    force: true
+  - path: "{{ docker_configs }}/ollama"
+    state: directory
+  - path: "{{ docker_configs }}/open-webui"
+    state: directory
+  - path: "{{ docker_configs }}/pihole"
+    state: directory
+  - path: "{{ docker_configs }}/plex"
+    state: directory
+  - src: "{{ datastore_mount }}"
+    path: "{{ lookup('env', 'HOME') }}/ds"
+    state: link
+    force: true
 
 virtualenv_path: ~/venv
 
@@ -66,3 +89,9 @@ apt_packages:
 
 pip:
   - ansible
+
+mounts:
+  - src: /dev/md5
+    path: "{{ datastore_mount }}"
+    state: mounted
+    fstype: ext4

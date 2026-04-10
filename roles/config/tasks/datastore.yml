@@ -1,0 +1,10 @@
+- name: Mount devices
+  ansible.posix.mount:
+    src: "{{ mount.src | default(omit) }}"
+    path: "{{ mount.path }}"
+    state: "{{ mount.state }}"
+    fstype: "{{ mount.fstype | default(omit) }}"
+  loop: "{{ mounts | default([]) }}"
+  loop_control:
+    loop_var: mount
+  become: true
