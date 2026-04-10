@@ -13,7 +13,7 @@
 
 - name: Configure apt packages
   ansible.builtin.apt:
-    name: "{{ apt | default([]) }}"
+    name: "{{ apt_packages | default([]) }}"
   become: true
 
 - name: Configure pip packages

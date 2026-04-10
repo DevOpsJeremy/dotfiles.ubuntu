@@ -1,3 +1,0 @@
-ansible_user: jwatkins
-ansible_host: ubuntu
-ansible_connection: local
